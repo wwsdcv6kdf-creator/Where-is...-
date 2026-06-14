@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>Where is…?</title>
+  <meta name="description" content="Geografie-Quiz: Flagge erkennen, Hauptstadt nennen und das Land per Stecknadel auf der Weltkarte finden." />
+
+  <!-- PWA / iPhone Home-Bildschirm -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0b3d5c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Where is…?" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" href="icon-192.png" sizes="192x192" />
+
+  <link rel="stylesheet" href="vendor/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ START ============ -->
+  <section id="screen-start" class="screen active">
+    <div class="hero">
+      <div class="hero-pin">📍</div>
+      <h1>Where is…?</h1>
+      <p class="tagline">Erkenne die Flagge, nenne die Hauptstadt und finde das Land auf der Weltkarte.</p>
+    </div>
+
+    <div class="card rules">
+      <h2>So funktioniert eine Runde</h2>
+      <ol>
+        <li><span class="badge">1&nbsp;Pkt</span><div class="rule-text"><b>Flagge:</b> Welches Land gehört zu dieser Flagge? (4&nbsp;Auswahlmöglichkeiten)</div></li>
+        <li><span class="badge">1&nbsp;Pkt</span><div class="rule-text"><b>Hauptstadt:</b> Wie heißt die Hauptstadt? (4&nbsp;Auswahlmöglichkeiten)</div></li>
+        <li><span class="badge">3&nbsp;Pkt</span><div class="rule-text"><b>Lage:</b> Setze die Stecknadel möglichst nah an die Hauptstadt.</div></li>
+      </ol>
+      <p class="hint">
+        Entfernung Stecknadel → Hauptstadt:<br>
+        ≤&nbsp;50&nbsp;km = <b>3&nbsp;Punkte</b> · ≤&nbsp;200&nbsp;km = <b>2&nbsp;Punkte</b> · ≤&nbsp;300&nbsp;km = <b>1&nbsp;Punkt</b>
+      </p>
+      <p class="hint small">5&nbsp;Runden · maximal <b>25&nbsp;Punkte</b>. Die Karte zeigt keine Grenzen – du musst raten!</p>
+    </div>
+
+    <p id="best-line" class="best" hidden></p>
+    <button id="btn-start" class="btn btn-primary btn-big">Spiel starten</button>
+    <p class="footer-note">195 Länder · Daten: Natural Earth</p>
+  </section>
+
+  <!-- ============ SPIEL ============ -->
+  <section id="screen-game" class="screen">
+    <header class="topbar">
+      <div class="topbar-item">Runde <span id="round-num">1</span>/5</div>
+      <div class="topbar-title">Where is…?</div>
+      <div class="topbar-item score">⭐ <span id="score-num">0</span></div>
+    </header>
+
+    <!-- Phase 1: Flagge -->
+    <div id="phase-flag" class="phase">
+      <p class="question">Welches Land hat diese Flagge?</p>
+      <div id="flag-display" class="flag-display">🏳️</div>
+      <div id="flag-options" class="options"></div>
+    </div>
+
+    <!-- Phase 2: Hauptstadt -->
+    <div id="phase-capital" class="phase" hidden>
+      <p class="question">Wie heißt die Hauptstadt von</p>
+      <div class="country-line"><span id="capital-country-flag"></span> <span id="capital-country-name"></span>?</div>
+      <div id="capital-options" class="options"></div>
+    </div>
+
+    <!-- Phase 3: Karte -->
+    <div id="phase-map" class="phase" hidden>
+      <p class="question map-question">
+        Wo liegt <span id="map-flag"></span> <b><span id="map-country"></span></b>?<br>
+        <span class="sub">Tippe auf die vermutete Lage der Hauptstadt <b><span id="map-capital"></span></b>.</span>
+      </p>
+      <div id="map"></div>
+      <div id="map-result" class="map-result" hidden></div>
+      <button id="btn-confirm" class="btn btn-primary" disabled>Stecknadel bestätigen</button>
+      <button id="btn-next" class="btn btn-primary" hidden>Weiter</button>
+    </div>
+
+    <!-- Feedback-Leiste (Phase 1 & 2) -->
+    <div id="feedback" class="feedback" hidden>
+      <div id="feedback-text"></div>
+      <button id="btn-continue" class="btn btn-secondary">Weiter</button>
+    </div>
+  </section>
+
+  <!-- ============ ERGEBNIS ============ -->
+  <section id="screen-results" class="screen">
+    <div class="hero">
+      <div class="hero-pin">🏆</div>
+      <h1>Auswertung</h1>
+    </div>
+    <div class="card">
+      <div class="total-score"><span id="total-num">0</span> <span class="of">/ 25 Punkte</span></div>
+      <div id="total-grade" class="grade"></div>
+    </div>
+    <div id="breakdown" class="breakdown"></div>
+    <button id="btn-replay" class="btn btn-primary btn-big">Nochmal spielen</button>
+  </section>
+
+</div>
+
+<script src="vendor/leaflet.js"></script>
+<script src="data/countries.js"></script>
+<script src="data/land.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
